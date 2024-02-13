@@ -1,9 +1,9 @@
 ## GFG Problem Of The Day
 
-### Today - 12 February 2024
-### Que - Recursive sequence
+### Today - 13 February 2024
+### Que - Clone an Undirected Graph
 
-The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/recursive-sequence1611/1)
+The problem can be found at the following link: [Question Link]([https://www.geeksforgeeks.org/problems/recursive-sequence1611/1](https://www.geeksforgeeks.org/problems/clone-graph/1))
 
 ### My Approach
 
@@ -17,21 +17,32 @@ This question is straightforward. Simply follow the steps asked by the question.
 ### Code (C++)
 
 ```cpp
-class Solution {
+class Solution { 
+
+   unordered_map<Node*, Node*> vis;
+
 public:
-    long long sequence(int n){
-        long long mod = 1e9 + 7;
-        long long out = 0, c = 1;
-        for(int i = 1; i <= n; ++i){
-            long long temp = 1;
-            for(int j = 0; j < i ; ++j){
-                temp *= c++;
-                temp %= mod;
-            }
-            out = (out + temp) % mod;
-        }
-        return out;
+
+  Node* cloneGraph(Node* node) {
+
+     if(!node) return NULL;
+
+        if(vis.find(node) != vis.end())
+
+                return vis[node];       
+
+       Node*nn = new Node(node->val);
+
+                  vis[node] = nn;  
+
+    for(Node*x : node->neighbors)
+
+nn->neighbors.push_back(cloneGraph(x));
+
+            return nn;
+
     }
+
 };
 ```
 
