@@ -1,21 +1,20 @@
 ## GFG Problem Of The Day
 
-### Today - 15 February 2024
-### Que - Count all Possible Path
-The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/castle-run3644/1)
+### Today - 16 February 2024
+### Que - Flatten BST to sorted list
+The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/flatten-bst-to-sorted-list--111950/1)
 
 ### My Approach
-Check for the existence of an Eulerian cycle in the graph. 
-- If every node in the graph has an even degree, it implies the existence of an Eulerian cycle. To determine this, sum the elements in each vector in the input `paths`. 
-- If any vector accumulate an odd sum, the function returns `false`, indicating the absence of an Eulerian cycle.
-
-##### Note:
-To understand the Euler circuit please [refer to this](https://www.youtube.com/watch?v=xR4sGgwtR2I)
+To flatten a BST into a sorted list, we can perform an in-order traversal of the BST. During the traversal, we keep track of the previous and next nodes to adjust the pointers accordingly. The steps are as follows:
+- Initialize `head` and `tail` pointers as `NULL`.
+- Perform in-order traversal of the BST.
+- While traversing, adjust the pointers of the nodes to form a linked list.
+- Finally, return the head of the linked list.
 
 ### Time and Auxiliary Space Complexity
 
-- **Time Complexity** : `O(N*M)`, where `N` is the number of vectors in `paths` and `M` is the average number of elements in each vector.
-- **Auxiliary Space Complexity** : `O(1)`, as we are not using any extra space except for some variables.
+- **Time Complexity**: The time complexity of the in-order traversal is `O(n)`, where n is the number of nodes in the BST.
+- **Auxiliary Space Complexity**: The space complexity is `O(h)`, where h is the height of the BST.
 
 ### Code (C++)
 
