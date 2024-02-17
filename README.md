@@ -1,53 +1,33 @@
 ## GFG Problem Of The Day
 
-### Today - 16 February 2024
-### Que - Flatten BST to sorted list
-The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/flatten-bst-to-sorted-list--111950/1)
+### Today - 17 February 2024
+### Que - Does array represent Heap
+The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/does-array-represent-heap4345/1)
 
 ### My Approach
-To flatten a BST into a sorted list, we can perform an in-order traversal of the BST. During the traversal, we keep track of the previous and next nodes to adjust the pointers accordingly. The steps are as follows:
-- Initialize `head` and `tail` pointers as `NULL`.
-- Perform in-order traversal of the BST.
-- While traversing, adjust the pointers of the nodes to form a linked list.
-- Finally, return the head of the linked list.
+- We iterate through each non-leaf node of the binary tree represented by the array.
+- For each node, we check if it violates the heap property. If it does, we return false.
+- If we reach the end of the loop without finding any violations, we return true.
 
 ### Time and Auxiliary Space Complexity
 
-- **Time Complexity**: The time complexity of the in-order traversal is `O(n)`, where n is the number of nodes in the BST.
-- **Auxiliary Space Complexity**: The space complexity is `O(h)`, where h is the height of the BST.
+- **Time Complexity** : O(n), where n is the number of elements in the array. We iterate through each non-leaf node once.
+- **Auxiliary Space Complexity** : O(1), no extra space is used.
 
 ### Code (C++)
-
 ```cpp
-class Solution
-{
+class Solution {
 public:
-    Node *flattenBST(Node *root)
+    bool isMaxHeap(int arr[], int n)
     {
-        function<pair<Node*, Node*> (Node *, Node *, bool)> dfs = [&](Node * node, Node * prev, bool isLeft) -> pair<Node*, Node*> {
-            if(!node)
-                return {nullptr, nullptr};
-                
-            pair<Node *, Node *> left = dfs(node -> left, node, 1);
-            pair<Node *, Node *> right = dfs(node -> right, node, 0);
-                
-            node -> left = left.first;
-            node -> right = right.first;
-            
-            Node * MIN = left.first ? left.first : node;
-            Node * MAX = right.second ? right.second : node;
-            
-            if(isLeft)
-                MAX -> right = prev;
-            
-            node -> left = nullptr;
-            return {MIN, MAX};
-        };
-        
-        return dfs(root, nullptr, 0).first;
+        int st = n / 2;
+        for(int i = st; i >= 0; --i){
+            if((i*2 + 1 < n && arr[i] < arr[i*2 + 1]) || (i*2 + 2 < n) && arr[i] < arr[i*2 + 2])
+                return false;
+        }
+        return true;
     }
 };
-
 ```
 
 ### Contribution and Support
