@@ -1,31 +1,52 @@
 ## GFG Problem Of The Day
 
-### Today - 17 February 2024
-### Que - Does array represent Heap
-The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/does-array-represent-heap4345/1)
+### Today - 19 February 2024
+### Que - Game with String
+The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/game-with-string4100/1)
 
 ### My Approach
-- We iterate through each non-leaf node of the binary tree represented by the array.
-- For each node, we check if it violates the heap property. If it does, we return false.
-- If we reach the end of the loop without finding any violations, we return true.
+
+The problem is about playing a game with a given string where the goal is to minimize the string's value. We count the frequency of each character in the string and repeatedly remove the most frequent character k times. Then, we calculate the sum of squares of the remaining frequencies, which represents the value of the resulting string.
+
+- We first count the frequency of each character in the string using an unordered map.
+- We use a priority queue to store the frequencies of characters. This allows us to easily remove the most frequent character each time.
+- We repeatedly remove the most frequent character k times and update the priority queue accordingly.
+- After the removal process, we calculate the value of the resulting string by summing the squares of the remaining frequencies.
 
 ### Time and Auxiliary Space Complexity
 
-- **Time Complexity** : O(n), where n is the number of elements in the array. We iterate through each non-leaf node once.
-- **Auxiliary Space Complexity** : O(1), no extra space is used.
+- **Time Complexity**: The time complexity of the solution is `O(n + k log m)`, where n is the length of the string, k is the given integer, and m is the number of unique characters in the string. 
+- **Auxiliary Space Complexity**: The auxiliary space complexity is `O(m)`, where m is the number of unique characters in the string, due to the usage of the unordered map and priority queue.
 
 ### Code (C++)
+
 ```cpp
 class Solution {
 public:
-    bool isMaxHeap(int arr[], int n)
-    {
-        int st = n / 2;
-        for(int i = st; i >= 0; --i){
-            if((i*2 + 1 < n && arr[i] < arr[i*2 + 1]) || (i*2 + 2 < n) && arr[i] < arr[i*2 + 2])
-                return false;
+    int minValue(string s, int k){
+        unordered_map<char,int> mp;
+        for(auto i: s){
+            ++mp[i];
         }
-        return true;
+        
+        priority_queue<int> pq;
+        for(auto i: mp)
+            pq.push(i.second);
+        
+        while(k--){
+            int t = pq.top();
+            pq.pop();
+            --t;
+            if(t) pq.push(t);
+        }
+        
+        int out = 0;
+        while(!pq.empty()){
+            out += pq.top() * pq.top();
+            pq.pop();
+        }
+        
+        return out;
     }
 };
 ```
