@@ -1,52 +1,53 @@
 ## GFG Problem Of The Day
 
-### Today - 19 February 2024
-### Que - Game with String
-The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/game-with-string4100/1)
+### Small Milestone for me
+In June 2022, I created a fun project called CP Contest Calendar extension and published it on the webstore. As of now, it has over 6000 active users. So, if any of you would like to use it, you can also install it from [here](https://chromewebstore.google.com/detail/cp-contest-calendar/nchadgecfkcdikollfdhgobmjoeaiegd).
+
+### Today - 22 February 2024
+### Que - Distinct occurrences
+The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/distinct-occurrences/1)
 
 ### My Approach
-
-The problem is about playing a game with a given string where the goal is to minimize the string's value. We count the frequency of each character in the string and repeatedly remove the most frequent character k times. Then, we calculate the sum of squares of the remaining frequencies, which represents the value of the resulting string.
-
-- We first count the frequency of each character in the string using an unordered map.
-- We use a priority queue to store the frequencies of characters. This allows us to easily remove the most frequent character each time.
-- We repeatedly remove the most frequent character k times and update the priority queue accordingly.
-- After the removal process, we calculate the value of the resulting string by summing the squares of the remaining frequencies.
+This is a question of the take-non take type of dynamic programming, which involves breaking a string into multiple strings based on a specific condition. So I also used dynamic programming to solve this problem.
+  - I define a recursive function `solve` to compute the number of distinct occurrences of string `t` in string `s` starting from indices `i` and `j`.
+  - At each step, we have two choices: 
+    1. Not take the current character of `s`.
+    2. If the current character of `s` matches the current character of `t`, then we advance both pointers.
+  - We memoize the results to avoid redundant computations.
 
 ### Time and Auxiliary Space Complexity
 
-- **Time Complexity**: The time complexity of the solution is `O(n + k log m)`, where n is the length of the string, k is the given integer, and m is the number of unique characters in the string. 
-- **Auxiliary Space Complexity**: The auxiliary space complexity is `O(m)`, where m is the number of unique characters in the string, due to the usage of the unordered map and priority queue.
+- **Time Complexity**: `(O(n x m))`, where `(n)` is the length of string `s` and `(m)` is the length of string `t`.
+- **Auxiliary Space Complexity**: `(O(n x m))` due to the memoization table.
 
 ### Code (C++)
 
 ```cpp
 class Solution {
 public:
-    int minValue(string s, int k){
-        unordered_map<char,int> mp;
-        for(auto i: s){
-            ++mp[i];
-        }
-        
-        priority_queue<int> pq;
-        for(auto i: mp)
-            pq.push(i.second);
-        
-        while(k--){
-            int t = pq.top();
-            pq.pop();
-            --t;
-            if(t) pq.push(t);
-        }
-        
-        int out = 0;
-        while(!pq.empty()){
-            out += pq.top() * pq.top();
-            pq.pop();
-        }
-        
-        return out;
+    int mod = 1e9 + 7;
+
+    int solve(int i, int j, int n, int m, string s, string t, vector<vector<int>>& dp) {
+        if (j == m)
+            return 1;
+        if (i == n)
+            return 0;
+
+        if (dp[i][j] != -1)
+            return dp[i][j];
+
+        int ntake = solve(i + 1, j, n, m, s, t, dp);
+        int take = 0;
+        if (s[i] == t[j])
+            take = solve(i + 1, j + 1, n, m, s, t, dp);
+
+        return dp[i][j] = (take + ntake) % mod;
+    }
+
+    int subsequenceCount(string s, string t) {
+        int n = s.size(), m = t.size();
+        vector<vector<int>> dp(n + 1, vector<int>(m + 1, -1));
+        return solve(0, 0, n, m, s, t, dp);
     }
 };
 ```
