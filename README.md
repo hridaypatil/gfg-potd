@@ -1,37 +1,45 @@
 ## GFG Problem Of The Day
 
-### Today - 25 February 2024
-### Que - Reach a given score
-The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/reach-a-given-score-1587115621/1)
+### Today - 26 February 2024
+### Que - Power Set
+The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/power-set4302/1)
 
 ### My Approach
-In this problem, we are tasked with reaching a given score using three possible moves: adding 3, adding 5, or adding 10 to the current score. 
-To solve this, I use dynamic programming. 
-- I initialize a vector `dp` of size `n + 1`, where `dp[i]` represents the number of ways to reach the score `i`.
-- Then, start with `dp[0] = 1` since there is one way to reach a score of 0 (by not making any move). 
-- Iterate through scores from 3 to `n`, adding the ways to reach the current score using three moves: add 3, add 5, and add 10. Use separate loops to prevent duplication caused by iterating in one loop.
-- Finally, return `dp[n]`, which represents the number of ways to reach the given score.
+- We use a recursive function to generate all possible subsequences of the given string.
+- At each step of recursion, we have two choices: either include the current character in the subsequence or exclude it.
+- We recursively call the function with the next index and both choices.
+- We store all generated subsequences in a vector.
+- Finally, we sort the vector to ensure lexicographically sorted output.
 
 ### Time and Auxiliary Space Complexity
-- **Time Complexity**: O(n), where n is the given score.
-- **Auxiliary Space Complexity**: O(n), additional space is used to store the dynamic programming array.
+
+- **Time Complexity**: `O(2^N * N)`, where `N` is the length of the input string. This is because there are `2^N` subsets, and for each subset, there can be up to N characters.
+- **Auxiliary Space Complexity**: `O(2^N * N)`, the space required to store all subsets.
 
 ### Code (C++)
 ```cpp
 class Solution {
 public:
-    long long int count(long long int n)
-    {
-        vector<long long int> dp(n+1, 0);
-        dp[0] = 1;
-        for (int i = 3; i <= n; i++)
-            dp[i] += dp[i - 3];
-        for (int i = 5; i <= n; i++)
-            dp[i] += dp[i - 5];
-        for (int i = 10; i <= n; i++)
-            dp[i] += dp[i - 10];
-
-        return dp[n];
+    vector<string> out;
+    string curr;
+    
+    void subSeq(int i, string &s) {
+        if (i == s.size()) {
+            if (curr.size())
+                out.push_back(curr);
+            return;
+        }
+        
+        curr.push_back(s[i]);
+        subSeq(i + 1, s);
+        curr.pop_back();
+        subSeq(i + 1, s);
+    }
+    
+    vector<string> AllPossibleStrings(string s) {
+        subSeq(0, s);
+        sort(out.begin(), out.end());
+        return out;
     }
 };
 ```
