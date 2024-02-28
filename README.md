@@ -1,30 +1,31 @@
 ## GFG Problem Of The Day
 
-### Today - 27 February 2024
-### Que - Play With OR
-The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/play-with-or5515/1)
+### Today - 28 February 2024
+### Que - Check if a number is divisible by 8
+The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/check-if-a-number-is-divisible-by-83957/1)
 
 ### My Approach
-- Iterate through the given array from index 0 to n-2.
-- For each index i, perform a bitwise OR operation between arr[i] and arr[i+1].
-- Update the value at arr[i] with the result of the OR operation.
-- Continue this process until the second-to-last element of the array.
-- Return the modified array.
+After analyzing the pattern, we've observed that if the last three digits of a number are divisible by 8, then the entire number is also divisible by 8. Therefore, let's solve this question using that approach.
+- I extract the last three digits of the given string.
+- I convert these last three digits to an integer.
+- I check if this integer is divisible by 8.
+- If it is divisible by 8, I return 1; otherwise, I return -1.
 
 ### Time and Auxiliary Space Complexity
 
-- **Time Complexity**: `O(N)`, where N is the length of the array.
-- **Auxiliary Space Complexity**: `O(1)`
+- **Time Complexity**: O(1), as the operations are constant time operations.
+- **Auxiliary Space Complexity**: O(1), as no extra space is used other than a few variables.
 
 ### Code (C++)
 ```cpp
-int* game_with_number(int arr[], int n)
-{
-    for(int i = 0 ; i < n - 1; ++i){
-        arr[i] |= arr[i+1];
+class Solution {
+public:
+    int DivisibleByEight(string s) {
+        int n = s.size();
+        int l = stoi(s.substr(max(n - 3, 0)));
+        return l % 8 == 0 ? 1 : -1;
     }
-    return arr;
-}
+};
 ```
 
 ### Contribution and Support
