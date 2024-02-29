@@ -1,29 +1,33 @@
 ## GFG Problem Of The Day
 
-### Today - 28 February 2024
-### Que - Check if a number is divisible by 8
-The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/check-if-a-number-is-divisible-by-83957/1)
+### Today - 29 February 2024
+### Que - Sum of bit differences
+The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/sum-of-bit-differences2937/1)
 
 ### My Approach
-After analyzing the pattern, we've observed that if the last three digits of a number are divisible by 8, then the entire number is also divisible by 8. Therefore, let's solve this question using that approach.
-- I extract the last three digits of the given string.
-- I convert these last three digits to an integer.
-- I check if this integer is divisible by 8.
-- If it is divisible by 8, I return 1; otherwise, I return -1.
+
+The approach for calculating the sum of bit differences involves iterating through each bit position (from 0 to 31 for 32-bit integers). For each bit position, count the number of elements in the array that have that bit set (1) and the number of elements that have that bit unset (0). Then, multiply the counts of 1s and 0s for that bit position and multiply it by 2, since each pair of set and unset bits contributes 2 to the sum of bit differences. Finally, accumulate these contributions for all bit positions to get the total sum of bit differences.
 
 ### Time and Auxiliary Space Complexity
 
-- **Time Complexity**: O(1), as the operations are constant time operations.
-- **Auxiliary Space Complexity**: O(1), as no extra space is used other than a few variables.
+- **Time Complexity**: The time complexity of this approach is `O(32 * n)`, where n is the number of elements in the array.
+- **Auxiliary Space Complexity**: The space complexity of this approach is `O(1)`, as we are using only a constant amount of extra space for storing intermediate variables.
 
 ### Code (C++)
 ```cpp
 class Solution {
 public:
-    int DivisibleByEight(string s) {
-        int n = s.size();
-        int l = stoi(s.substr(max(n - 3, 0)));
-        return l % 8 == 0 ? 1 : -1;
+    long long sumBitDifferences(int arr[], int n) {
+        long long out = 0;
+        for(int i=0; i<32; ++i){
+            long long one = 0;
+            for(int j = 0; j < n; ++j)
+                if((arr[j]&(1<<i))!=0)
+                    ++one;
+            long long zero = n - one;
+            out += 2*one*zero;
+        }
+        return out;
     }
 };
 ```
