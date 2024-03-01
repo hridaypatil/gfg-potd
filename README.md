@@ -1,33 +1,36 @@
 ## GFG Problem Of The Day
 
-### Today - 29 February 2024
-### Que - Sum of bit differences
-The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/sum-of-bit-differences2937/1)
+### Today - 01 March 2024
+### Que - Peak element
+The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/peak-element/1)
 
 ### My Approach
-
-The approach for calculating the sum of bit differences involves iterating through each bit position (from 0 to 31 for 32-bit integers). For each bit position, count the number of elements in the array that have that bit set (1) and the number of elements that have that bit unset (0). Then, multiply the counts of 1s and 0s for that bit position and multiply it by 2, since each pair of set and unset bits contributes 2 to the sum of bit differences. Finally, accumulate these contributions for all bit positions to get the total sum of bit differences.
-
+I used binary search to find the peak element. This method relies on the fact that there's a point where the sequence starts increasing and then starts decreasing.
+- We initialize two pointers, `left` and `right`, representing the start and end of the array, respectively.
+- We then enter a loop where we calculate the middle index.
+- If the middle element is less than its adjacent element to the right, it means the peak element must be on the right side of the middle element. So, we move `left` to `mid + 1`.
+- Otherwise, if the middle element is greater than or equal to its adjacent element to the right, it means the peak element must be on the left side of the middle element or could be the middle element itself. So, we move `right` to `mid`.
+- We keep doing this until `left` is less than `right`, at which point `left` will be pointing to the peak element.
+  
 ### Time and Auxiliary Space Complexity
 
-- **Time Complexity**: The time complexity of this approach is `O(32 * n)`, where n is the number of elements in the array.
-- **Auxiliary Space Complexity**: The space complexity of this approach is `O(1)`, as we are using only a constant amount of extra space for storing intermediate variables.
+- **Time Complexity**: The time complexity of the binary search approach is `O(log n)`, where n is the number of elements in the array.
+- **Auxiliary Space Complexity**: The space complexity is `O(1)` as we are using only a constant amount of extra space.
 
 ### Code (C++)
 ```cpp
 class Solution {
 public:
-    long long sumBitDifferences(int arr[], int n) {
-        long long out = 0;
-        for(int i=0; i<32; ++i){
-            long long one = 0;
-            for(int j = 0; j < n; ++j)
-                if((arr[j]&(1<<i))!=0)
-                    ++one;
-            long long zero = n - one;
-            out += 2*one*zero;
+    int peakElement(int arr[], int n) {
+        int left = 0, right = n - 1, mid;
+        while (left < right) {
+            mid = (left + right) / 2;
+            if (arr[mid] < arr[mid + 1])
+                left = mid + 1;
+            else
+                right = mid;
         }
-        return out;
+        return left;
     }
 };
 ```
