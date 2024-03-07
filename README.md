@@ -1,54 +1,41 @@
 ## GFG Problem Of The Day
 
-### Today - 06 March 2024
-### Que - Search Pattern (Rabin-Karp Algorithm)
-The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/search-pattern-rabin-karp-algorithm--141631/1)
+### Today - 07 March 2024
+### Que - Longest repeating and non-overlapping substring
+The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/longest-repeating-and-non-overlapping-substring3421/1)
 
 ### My Approach
-I suggest checking out this blog for a clear explanation of the Rabin-Karp Algorithm: [Rabin-Karp Algo](https://www.programiz.com/dsa/rabin-karp-algorithm).
+For this problem, I utilized a sliding window approach. Here are the steps:
+- Initialize variables `nax`, `i`, `j`, and `out`.
+- Iterate through the string `s` using two pointers `i` and `j`.
+- Within the loop, create substrings of `s` starting from index `i` and ending at index `j`.
+- Check if the length of the current substring is greater than `nax` and if the substring repeats later in the string.
+- Update `nax` and `out` accordingly.
+- Slide the window by incrementing `i` or `j` based on the condition.
+- Return the longest repeating and non-overlapping substring.
 
 ### Time and Auxiliary Space Complexity
 
-- **Time Complexity**:  Due to the use of hashing, the average time complexity is `O(n + m)`.
-- **Auxiliary Space Complexity**: The auxiliary space complexity is `O(1)` since we only use a constant amount of extra space for storing variables and data structures.
+- **Time Complexity**: `O(n^2)`, where n is the length of the input string. This complexity arises from generating all possible substrings and checking for repeats.
+- **Auxiliary Space Complexity**: `O(1)`, as we are not using any extra space that grows with the input size.
 
 ### Code (C++)
 
 ```cpp
 class Solution {
 public:
-    vector<int> search(string pattern, string text) {
-        vector<int> out;
-        int mod = 10;
-        int h = pattern.size();
-        int n = text.size();
-        int hashp = 0;
-        int hasht = 0;
-        int p = 1;
-        
-        for (int i = 0; i < h - 1; ++i)
-            p = (p * 26) % mod;
-        
-        for (int i = 0; i < h; ++i) {
-            hashp = ((hashp * 26) + pattern[i]) % mod;
-            hasht = ((hasht * 26) + text[i]) % mod;
-        }
-        
-        for (int i = 0; i <= n - h; ++i) {
-            if (hashp == hasht) {
-                int j;
-                for (j = 0; j < h; ++j)
-                    if (pattern[j] != text[i + j])
-                        break;
-                        
-                if (j == h)
-                    out.push_back(i + 1);
-            }
-            if (i < n - h) {
-                hasht = (26 * (hasht - text[i] * p) + text[i + h]) % mod;
-                if (hasht < 0)
-                    hasht += mod;
-            }
+    string longestSubstring(string s, int n) {
+        int nax = 0, i = 0, j = 0;
+        string out = "-1";
+    
+        for( ; i < n && j < n; ++j) {
+            string str = s.substr(i, j - i + 1);
+    
+            if (nax < str.size() && s.find(str, j + 1) != string::npos) {
+                nax = str.size();
+                out = str;
+            } else 
+                ++i;
         }
         return out;
     }
