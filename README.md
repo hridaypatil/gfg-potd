@@ -1,44 +1,55 @@
 ## GFG Problem Of The Day
 
-### Today - 07 March 2024
-### Que - Longest repeating and non-overlapping substring
-The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/longest-repeating-and-non-overlapping-substring3421/1)
+### Today - 08 March 2024
+### Que - Check if frequencies can be equal
+The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/check-frequencies4211/1)
 
 ### My Approach
-For this problem, I utilized a sliding window approach. Here are the steps:
-- Initialize variables `nax`, `i`, `j`, and `out`.
-- Iterate through the string `s` using two pointers `i` and `j`.
-- Within the loop, create substrings of `s` starting from index `i` and ending at index `j`.
-- Check if the length of the current substring is greater than `nax` and if the substring repeats later in the string.
-- Update `nax` and `out` accordingly.
-- Slide the window by incrementing `i` or `j` based on the condition.
-- Return the longest repeating and non-overlapping substring.
+- I iterate through the given string and count the frequency of each character using an unordered_map.
+- I find the minimum and maximum frequencies among all characters.
+- I check if the difference between the maximum and minimum frequencies is more than 1. If it is, return 0 (false).
+- I count the number of characters having the minimum frequency.
+- I check if the difference between the total number of unique characters and the number of characters with the minimum frequency is at most 1. If it is, return 1 (true), indicating that frequencies can be made equal.
 
 ### Time and Auxiliary Space Complexity
 
-- **Time Complexity**: `O(n^2)`, where n is the length of the input string. This complexity arises from generating all possible substrings and checking for repeats.
-- **Auxiliary Space Complexity**: `O(1)`, as we are not using any extra space that grows with the input size.
+- **Time Complexity** : O`(N)`, where N is the length of the input string.
+- **Auxiliary Space Complexity** : At most, 26 unique characters can be used, resulting in a time complexity of `O(26)`
 
 ### Code (C++)
-
 ```cpp
-class Solution {
+class Solution{
 public:
-    string longestSubstring(string s, int n) {
-        int nax = 0, i = 0, j = 0;
-        string out = "-1";
-    
-        for( ; i < n && j < n; ++j) {
-            string str = s.substr(i, j - i + 1);
-    
-            if (nax < str.size() && s.find(str, j + 1) != string::npos) {
-                nax = str.size();
-                out = str;
-            } else 
-                ++i;
-        }
-        return out;
+bool sameFreq(string s)
+{
+    // code here 
+    int n = s.size();
+    map<char,int> mp;
+    for(auto it : s) mp[it]++;
+    map<int,int> h;
+ 
+   int mini = 1e7;
+    for(auto it : mp){
+        mini = min(it.second,mini);
+      h[it.second]++;
     }
+   
+    if(h.size()==1) return true;
+    if(h.size() ==2){
+      
+        for(auto it : h){
+            int cnt = it.second;
+            int mpfreq = it.first;
+           if(cnt == 1){
+               if(mpfreq == 1) return true;
+               if(mpfreq == mini + 1) return true;
+           }
+            
+        }
+    }
+    return false;
+   
+}
 };
 ```
 
