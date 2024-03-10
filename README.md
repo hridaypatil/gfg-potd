@@ -1,43 +1,35 @@
 ## GFG Problem Of The Day
 
-### Today - 09 March 2024
-### Que - Find the N-th character
-The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/find-the-n-th-character5925/1)
+### Today - 10 March 2024
+### Que - Remove all duplicates from a given string
+The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/remove-all-duplicates-from-a-given-string4321/1)
 
-### My Approach
-- Initialize a variable len to store the length of the input string s.
-- Use a loop to iterate r times for the specified number of iterations.
-- In each iteration : 
-  - Create a temporary string temp and copy the content of the original string s.
-  - Use another loop to traverse each character in the original string s.
-  - Update each character based on the following logic :
-    - If the corresponding character in temp at position j/2 is '0', set s[j] to '0' + (j % 2).
-    - Otherwise, set s[j] to '1' - (j % 2).
-- After completing all iterations, the desired character is at index n in the final string s.
+### My Approach.
+Simple straightforward questions.
+- I use an unordered_set to keep track of characters encountered.
+- Iterate through the input string.
+- If the current character is not in the set, add it to the output string and insert it into the set.
+- Return the output string.
 
 ### Time and Auxiliary Space Complexity
 
-- **Time Complexity** : `O(r*|s|)`, as there are two nested loops.
-- **Auxiliary Space Complexity** : `O(|s|)`, as the temporary string temp is of the same length as the input string.
+- **Time Complexity** : `O(N)`, where N is the length of the input string. We iterate through the string once.
+- **Auxiliary Space Complexity** : `O(N)`, where N is the length of the input string.
 
 ### Code (C++)
 ```cpp
-class Solution{
-  public:
-    char nthCharacter(string s, int r, int n)
-    {
-        int len=s.length();
-        for (int i=0;i<r;i++)
-        {
-            string temp=s;
-            for (int j=0;j<len;j++)
-            {
-                if (temp[j/2]=='0')
-                    s[j]='0'+(j%2);
-                else s[j]='1'-(j%2);
+class Solution {
+public:
+    string removeDuplicates(string str) {
+        unordered_set<char> st;
+        string out;
+        for(auto i : str){
+            if(st.find(i) == st.end()){
+                out += i;
+                st.insert(i);
             }
         }
-        return s[n];
+        return out;
     }
 };
 ```
