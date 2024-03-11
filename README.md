@@ -1,35 +1,47 @@
 ## GFG Problem Of The Day
 
-### Today - 10 March 2024
-### Que - Remove all duplicates from a given string
-The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/remove-all-duplicates-from-a-given-string4321/1)
+### Today - 11 March 2024
+### Que - Count pairs Sum in matrices
+The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/count-pairs-sum-in-matrices4332/1)
 
-### My Approach.
-Simple straightforward questions.
-- I use an unordered_set to keep track of characters encountered.
-- Iterate through the input string.
-- If the current character is not in the set, add it to the output string and insert it into the set.
-- Return the output string.
+### My Approach
+To solve this problem, I have used a two-pointer approach. 
+- I initialize one pointer at the top-right corner of `mat1` and another pointer at the bottom-left corner of `mat2`.
+- Then, we move these pointers inward while adjusting them based on the sum of the elements at their respective positions. 
+- If the sum is equal to `x`, we increment the count and move both pointers inward. If the sum is greater than `x`, we decrement the right pointer, and if it's less than `x`, we increment the left pointer. 
+- We repeat this process until both pointers meet or cross each other.
 
 ### Time and Auxiliary Space Complexity
 
-- **Time Complexity** : `O(N)`, where N is the length of the input string. We iterate through the string once.
-- **Auxiliary Space Complexity** : `O(N)`, where N is the length of the input string.
+- **Time Complexity** : `O(n*n)`, where n is the size of the matrices. We traverse both matrices once using the two-pointer approach, resulting in linear time complexity.
+- **Auxiliary Space Complexity** : O(1). We use only a constant amount of extra space for storing variables like `l`, `r`, `cnt`, etc.
 
 ### Code (C++)
 ```cpp
 class Solution {
 public:
-    string removeDuplicates(string str) {
-        unordered_set<char> st;
-        string out;
-        for(auto i : str){
-            if(st.find(i) == st.end()){
-                out += i;
-                st.insert(i);
+    int countPairs(vector<vector<int>> &mat1, vector<vector<int>> &mat2, int n, int x)
+    {
+        int sz = n * n;
+        int l = 0, r = sz - 1;
+        int cnt = 0;
+        
+        while (l < sz && r >= 0)
+        {
+            int sum = mat1[l / n][l % n] + mat2[r / n][r % n];
+            
+            if (sum == x) {
+                l++;
+                r--;
+                ++cnt;
             }
+            else if (sum > x)
+                --r;
+            else
+                ++l;
         }
-        return out;
+        
+        return cnt;
     }
 };
 ```
