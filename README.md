@@ -1,47 +1,59 @@
 ## GFG Problem Of The Day
 
-### Today - 11 March 2024
-### Que - Count pairs Sum in matrices
-The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/count-pairs-sum-in-matrices4332/1)
+### Today - 14 March 2024
+### Que - Largest subsquare surrounded by X
+The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/largest-subsquare-surrounded-by-x0558/1)
 
 ### My Approach
-To solve this problem, I have used a two-pointer approach. 
-- I initialize one pointer at the top-right corner of `mat1` and another pointer at the bottom-left corner of `mat2`.
-- Then, we move these pointers inward while adjusting them based on the sum of the elements at their respective positions. 
-- If the sum is equal to `x`, we increment the count and move both pointers inward. If the sum is greater than `x`, we decrement the right pointer, and if it's less than `x`, we increment the left pointer. 
-- We repeat this process until both pointers meet or cross each other.
+To solve this problem, I create two additional matrices, col and row, to store the count of consecutive 'X's in the columns and rows respectively.
+- Then, I iterate over each cell of the matrix to find the largest subsquare surrounded by 'X' characters.
+- For each cell, we calculate the minimum of the counts of consecutive 'X's in its corresponding column and row. This gives us the size of the largest subsquare with the current cell as its bottom-right corner.
+- We then iterate over decreasing sizes of subsquares starting from this minimum size and check if all the cells in the subsquare are surrounded by 'X' characters. If they are, we update the maximum size found so far.
+- Finally, we return the maximum size of the subsquare found.
 
 ### Time and Auxiliary Space Complexity
-
-- **Time Complexity** : `O(n*n)`, where n is the size of the matrices. We traverse both matrices once using the two-pointer approach, resulting in linear time complexity.
-- **Auxiliary Space Complexity** : O(1). We use only a constant amount of extra space for storing variables like `l`, `r`, `cnt`, etc.
+- **Time Complexity**: O(n^2) where n is the size of the input matrix.
+- **Auxiliary Space Complexity**: O(n^2) for the auxiliary matrices `col` and `row`.
 
 ### Code (C++)
+
 ```cpp
 class Solution {
 public:
-    int countPairs(vector<vector<int>> &mat1, vector<vector<int>> &mat2, int n, int x)
-    {
-        int sz = n * n;
-        int l = 0, r = sz - 1;
-        int cnt = 0;
+    int largestSubsquare(int n, vector<vector<char>> a) {
+        vector<vector<int>> col(n,vector<int>(n,0));
+        vector<vector<int>> row(n,vector<int>(n,0));
         
-        while (l < sz && r >= 0)
-        {
-            int sum = mat1[l / n][l % n] + mat2[r / n][r % n];
-            
-            if (sum == x) {
-                l++;
-                r--;
-                ++cnt;
+        for(int i=0;i<n;++i){
+            int sum=0;
+            for(int j=n-1;j>=0;--j){
+                sum = (a[i][j] == 'O')? 0 : sum + 1;
+                col[i][j]=sum;
             }
-            else if (sum > x)
-                --r;
-            else
-                ++l;
         }
         
-        return cnt;
+        for(int j=0;j<n;++j){
+            int sum=0;
+            for(int i=n-1;i>=0;--i){
+               sum = (a[i][j] == 'O')? 0 : sum + 1;
+               row[i][j]=sum;
+            }
+        }
+        
+        int out=0;
+        for(int i=0;i<n;++i){
+            for(int j=0;j<n;++j){
+                int sq = min(col[i][j],row[i][j]);
+                while(sq > out)
+                {
+                    if((col[i+sq-1][j])>=sq && (row[i][j+sq-1])>=sq)
+                        out=sq;
+                    
+                    --sq;
+                }
+            }
+        }
+        return out;
     }
 };
 ```
