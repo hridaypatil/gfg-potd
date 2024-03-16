@@ -1,59 +1,28 @@
 ## GFG Problem Of The Day
 
-### Today - 14 March 2024
-### Que - Largest subsquare surrounded by X
-The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/largest-subsquare-surrounded-by-x0558/1)
+### Today - 16 March 2024
+### Que - Delete without head pointer
+The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/delete-without-head-pointer/1)
 
 ### My Approach
-To solve this problem, I create two additional matrices, col and row, to store the count of consecutive 'X's in the columns and rows respectively.
-- Then, I iterate over each cell of the matrix to find the largest subsquare surrounded by 'X' characters.
-- For each cell, we calculate the minimum of the counts of consecutive 'X's in its corresponding column and row. This gives us the size of the largest subsquare with the current cell as its bottom-right corner.
-- We then iterate over decreasing sizes of subsquares starting from this minimum size and check if all the cells in the subsquare are surrounded by 'X' characters. If they are, we update the maximum size found so far.
-- Finally, we return the maximum size of the subsquare found.
+To solve this question I simply copy the data of the next node to the current node to be deleted. 
+- Then, I update the next pointer of the current node to skip the next node and directly point to the node after it. 
+- Finally, free the memory allocated for the next node.
 
 ### Time and Auxiliary Space Complexity
-- **Time Complexity**: O(n^2) where n is the size of the input matrix.
-- **Auxiliary Space Complexity**: O(n^2) for the auxiliary matrices `col` and `row`.
+
+- **Time Complexity** : `O(1)` - Since we are only performing a constant number of operations irrespective of the size of the linked list.
+- **Auxiliary Space Complexity** : `O(1)` - No extra space is used other than a few pointers regardless of the input size.
 
 ### Code (C++)
-
 ```cpp
 class Solution {
 public:
-    int largestSubsquare(int n, vector<vector<char>> a) {
-        vector<vector<int>> col(n,vector<int>(n,0));
-        vector<vector<int>> row(n,vector<int>(n,0));
-        
-        for(int i=0;i<n;++i){
-            int sum=0;
-            for(int j=n-1;j>=0;--j){
-                sum = (a[i][j] == 'O')? 0 : sum + 1;
-                col[i][j]=sum;
-            }
-        }
-        
-        for(int j=0;j<n;++j){
-            int sum=0;
-            for(int i=n-1;i>=0;--i){
-               sum = (a[i][j] == 'O')? 0 : sum + 1;
-               row[i][j]=sum;
-            }
-        }
-        
-        int out=0;
-        for(int i=0;i<n;++i){
-            for(int j=0;j<n;++j){
-                int sq = min(col[i][j],row[i][j]);
-                while(sq > out)
-                {
-                    if((col[i+sq-1][j])>=sq && (row[i][j+sq-1])>=sq)
-                        out=sq;
-                    
-                    --sq;
-                }
-            }
-        }
-        return out;
+    void deleteNode(Node *del_node) {
+        Node* next_node = del_node->next;
+        del_node->data = next_node->data;
+        del_node->next = next_node->next;
+        free(next_node);
     }
 };
 ```
