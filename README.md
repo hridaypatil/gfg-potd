@@ -1,28 +1,35 @@
 ## GFG Problem Of The Day
 
-### Today - 16 March 2024
-### Que - Delete without head pointer
-The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/delete-without-head-pointer/1)
+### Today - 17 March 2024
+### Que - Count Pairs whose sum is equal to X
+The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/count-pairs-whose-sum-is-equal-to-x/1)
 
 ### My Approach
-To solve this question I simply copy the data of the next node to the current node to be deleted. 
-- Then, I update the next pointer of the current node to skip the next node and directly point to the node after it. 
-- Finally, free the memory allocated for the next node.
+To solve this problem, I utilize a hash set to store the elements of the first linked list. Then, I iterate through the second linked list, checking if the difference between the target sum and the current element exists in the hash set. If it does, I increment the count of pairs. Finally, I return the count of pairs found.
 
 ### Time and Auxiliary Space Complexity
 
-- **Time Complexity** : `O(1)` - Since we are only performing a constant number of operations irrespective of the size of the linked list.
-- **Auxiliary Space Complexity** : `O(1)` - No extra space is used other than a few pointers regardless of the input size.
+- **Time Complexity**: `O(n + m)`, where n is the number of elements in the first linked list and m is the number of elements in the second linked list.
+- **Auxiliary Space Complexity**: `O(n)`, where n is the number of elements in the first linked list.
 
 ### Code (C++)
+
 ```cpp
 class Solution {
 public:
-    void deleteNode(Node *del_node) {
-        Node* next_node = del_node->next;
-        del_node->data = next_node->data;
-        del_node->next = next_node->next;
-        free(next_node);
+    int countPairs(struct Node* head1, struct Node* head2, int x) {
+        unordered_set<int> st;
+        while (head1) {
+            st.insert(head1->data);
+            head1 = head1->next;
+        }
+        int cnt = 0;
+        while (head2) {
+            if (st.find(x - head2->data) != st.end())
+                ++cnt;
+            head2 = head2->next;
+        }
+        return cnt;
     }
 };
 ```
