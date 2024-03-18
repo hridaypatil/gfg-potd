@@ -1,35 +1,48 @@
 ## GFG Problem Of The Day
 
-### Today - 17 March 2024
-### Que - Count Pairs whose sum is equal to X
-The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/count-pairs-whose-sum-is-equal-to-x/1)
+### Today - 18 March 2024
+### Que - Level order traversal
+The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/level-order-traversal/1)
 
 ### My Approach
-To solve this problem, I utilize a hash set to store the elements of the first linked list. Then, I iterate through the second linked list, checking if the difference between the target sum and the current element exists in the hash set. If it does, I increment the count of pairs. Finally, I return the count of pairs found.
+- I performed a level order traversal of the binary tree using BFS approach.
+- We start by pushing the root node into the queue.
+- Then, we iterate while the queue is not empty:
+    - Pop the front node from the queue and push its data into the output vector.
+    - If the popped node has a left child, push it into the queue.
+    - If the popped node has a right child, push it into the queue.
+- Repeat until all nodes are traversed.
 
 ### Time and Auxiliary Space Complexity
 
-- **Time Complexity**: `O(n + m)`, where n is the number of elements in the first linked list and m is the number of elements in the second linked list.
-- **Auxiliary Space Complexity**: `O(n)`, where n is the number of elements in the first linked list.
+- **Time Complexity**: The time complexity of this approach is `O(N)`, where N is the number of nodes in the binary tree. This is because we visit each node once.
+- **Auxiliary Space Complexity**: The auxiliary space complexity is `O(N)`, where N is the number of nodes in the binary tree.
 
 ### Code (C++)
-
 ```cpp
 class Solution {
 public:
-    int countPairs(struct Node* head1, struct Node* head2, int x) {
-        unordered_set<int> st;
-        while (head1) {
-            st.insert(head1->data);
-            head1 = head1->next;
+    vector<int> levelOrder(Node* root) {
+        queue<Node*> q;
+        vector<int> out;
+        
+        if(root == nullptr)
+            return out;
+        
+        q.push(root);
+        
+        while(!q.empty()) {
+            auto front = q.front();
+            q.pop();
+            out.push_back(front->data);
+            
+            if(front->left)
+                q.push(front->left);
+            if(front->right)
+                q.push(front->right);
         }
-        int cnt = 0;
-        while (head2) {
-            if (st.find(x - head2->data) != st.end())
-                ++cnt;
-            head2 = head2->next;
-        }
-        return cnt;
+        
+        return out;
     }
 };
 ```
