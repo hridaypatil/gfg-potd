@@ -1,50 +1,48 @@
 ## GFG Problem Of The Day
 
-### Today - 18 March 2024
-### Que - Level order traversal
-The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/level-order-traversal/1)
+### Today - 19 March 2024
 
-### My Approach
-- I performed a level order traversal of the binary tree using BFS approach.
-- We start by pushing the root node into the queue.
-- Then, we iterate while the queue is not empty:
-    - Pop the front node from the queue and push its data into the output vector.
-    - If the popped node has a left child, push it into the queue.
-    - If the popped node has a right child, push it into the queue.
-- Repeat until all nodes are traversed.
 
-### Time and Auxiliary Space Complexity
+### Code (Python)
 
-- **Time Complexity**: The time complexity of this approach is `O(N)`, where N is the number of nodes in the binary tree. This is because we visit each node once.
-- **Auxiliary Space Complexity**: The auxiliary space complexity is `O(N)`, where N is the number of nodes in the binary tree.
-
-### Code (C++)
-```cpp
-class Solution {
-public:
-    vector<int> levelOrder(Node* root) {
-        queue<Node*> q;
-        vector<int> out;
+class Solution:
+    def maximumWeight(self, n, edges, q, queries):
+        ans = 0
         
-        if(root == nullptr)
-            return out;
+        def root(i, parent):
+            while parent[i] != i:
+                parent[i] = parent[parent[i]]
+                i = parent[i]
+            return i
         
-        q.push(root);
+        def union(a, b, parent, sz):
+            nonlocal ans
+            ra = root(a, parent)
+            rb = root(b, parent)
+            if ra == rb:
+                return sz[ra] * sz[ra]
+            if sz[ra] < sz[rb]:
+                ra, rb = rb, ra
+                a, b = b, a
+            ans += sz[ra] * sz[rb]
+            parent[rb] = ra
+            sz[ra] += sz[rb]
+            return ans
         
-        while(!q.empty()) {
-            auto front = q.front();
-            q.pop();
-            out.push_back(front->data);
-            
-            if(front->left)
-                q.push(front->left);
-            if(front->right)
-                q.push(front->right);
-        }
+        parent = [i for i in range(n + 1)]
+        sz = [1] * (n + 1)
+        wt = sorted([(w, (a, b)) for a, b, w in edges])
         
-        return out;
-    }
-};
+        mp = {}
+        for w, (a, b) in wt:
+            mp[w] = union(a, b, parent, sz)
+        
+        res = []
+        for query in queries:
+            val = max([v for k, v in mp.items() if k <= query], default=0)
+            res.append(val)
+        
+        return res
 ```
 
 ### Contribution and Support
