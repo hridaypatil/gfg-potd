@@ -4,7 +4,6 @@
 
 
 ### Code (Python)
-
 class Solution:
     def maximumWeight(self, n, edges, q, queries):
         ans = 0
