@@ -1,47 +1,54 @@
 ## GFG Problem Of The Day
 
-### Today - 19 March 2024
+### Today - 20 March 2024
+### Que - Sum of nodes on the longest path from root to leaf node
+The problem can be found at the following link: [Question Link](https://www.geeksforgeeks.org/problems/sum-of-the-longest-bloodline-of-a-tree/1)
 
+### My Approach
+- Implement Depth First Search (DFS) to traverse the binary tree.
+- At each node, calculate the sum and length of the longest path from the root to a leaf node.
+- Maintain a pair of integers representing the sum and length of the longest path encountered so far.
+- Compare the longest paths from the left and right subtrees. If they have the same length, choose the path with the maximum sum.
+- Update the sum and length of the current longest path based on the chosen subtree.
+- Recursively compute the sum and length for each subtree.
+- Finally, return the sum of nodes along the longest path from the root to any leaf node.
 
-### Code (Python)
-class Solution:
-    def maximumWeight(self, n, edges, q, queries):
-        ans = 0
-        
-        def root(i, parent):
-            while parent[i] != i:
-                parent[i] = parent[parent[i]]
-                i = parent[i]
-            return i
-        
-        def union(a, b, parent, sz):
-            nonlocal ans
-            ra = root(a, parent)
-            rb = root(b, parent)
-            if ra == rb:
-                return sz[ra] * sz[ra]
-            if sz[ra] < sz[rb]:
-                ra, rb = rb, ra
-                a, b = b, a
-            ans += sz[ra] * sz[rb]
-            parent[rb] = ra
-            sz[ra] += sz[rb]
-            return ans
-        
-        parent = [i for i in range(n + 1)]
-        sz = [1] * (n + 1)
-        wt = sorted([(w, (a, b)) for a, b, w in edges])
-        
-        mp = {}
-        for w, (a, b) in wt:
-            mp[w] = union(a, b, parent, sz)
-        
-        res = []
-        for query in queries:
-            val = max([v for k, v in mp.items() if k <= query], default=0)
-            res.append(val)
-        
-        return res
+### Time and Auxiliary Space Complexity
+
+- **Time Complexity**: The time complexity of this approach is `O(N)`, where N is the number of nodes in the binary tree.
+- **Auxiliary Space Complexity**: The auxiliary space complexity is `O(H)`, where H is the height of the binary tree
+
+### Code (C++)
+```cpp
+class Solution
+{
+    public:
+    function<pair<int,int>(Node *)>dfs=[&](Node* node)->pair<int,int>
+    {
+        if(!node)
+            return {0, 0};
+        pair<int,int>left=dfs(node->left);
+        pair<int,int>right=dfs(node->right);
+        pair<int,int>ans;
+        if(left.second>right.second)
+            ans=left;
+        else if(right.second>left.second)
+            ans=right;
+        else
+        {
+            ans.first=max(left.first, right.first);
+            ans.second=left.second;
+        }
+        ans.first+=(node->data);
+        ans.second++;
+        return ans;
+    };
+    
+    int sumOfLongRootToLeafPath(Node *root)
+    {
+        return dfs(root).first;
+    }
+};
 ```
 
 ### Contribution and Support
